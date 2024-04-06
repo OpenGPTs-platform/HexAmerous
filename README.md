@@ -1,4 +1,5 @@
-# OpenGPTs-flow
+# Run Executor Worker
+The Run Executor Worker is what will enable GPT responses to intelligently use tools as needed to fulfill a user request.  
 Look for `Planner Agent` in the [OpenGPTs FigJam planning doc](https://www.figma.com/file/RBobTMUNS6EtelpTDyYqnA/Open-GPTs?type=whiteboard&node-id=0%3A1&t=8AqiYUR3vbQFPVww-1)
 ![image](https://github.com/OpenGPTs-platform/HexAmerous/assets/37946988/caa353c4-f4ed-47ed-9fac-ab43b7b06e05)
 
