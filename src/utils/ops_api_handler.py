@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv
 from data_models import run
 from openai.types.beta.threads import Message
-from openai.types.beta.threads.runs import RetrievalToolCall
+from openai.types.beta.threads.runs import FileSearchToolCall
 from utils.openai_clients import assistants_client
 
 # TODO: create run script that imports env vars
@@ -18,6 +18,7 @@ def update_run(thread_id: str, run_id: str, run_update: run.RunUpdate) -> run.Ru
     """
     Update the status of a Run.
 
+    
     Parameters:
     thread_id (str): The ID of the thread.
     run_id (str): The ID of the run.
@@ -81,10 +82,10 @@ def create_retrieval_runstep(
     thread_id: str, run_id: str, assistant_id: str, documents: List[str]
 ) -> dict:
     # Assuming the `ToolCall` is properly defined elsewhere to include `RetrievalToolCall`.
-    tool_call = RetrievalToolCall(
+    tool_call = FileSearchToolCall(
         id="unique_tool_call_id",  # This should be a unique identifier.
-        retrieval={"documents": documents},
-        type="retrieval",
+        file_search={"documents": documents},
+        type="file_search",
     )
 
     # Prepare run step details with the tool call

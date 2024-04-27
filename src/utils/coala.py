@@ -2,7 +2,6 @@ from typing import Literal
 from openai.pagination import SyncCursorPage
 from data_models import run
 from openai.types.beta.threads import Message
-from openai.types.beta.threads.runs import RetrievalToolCall
 from utils.tools import Actions
 from utils.tools import ActionItem
 

@@ -2,7 +2,7 @@ from enum import Enum
 from typing import List
 from openai.types.beta import AssistantTool
 from openai.types.beta.function_tool import FunctionTool
-from openai.types.beta.retrieval_tool import RetrievalTool
+from openai.types.beta.file_search_tool import FileSearchTool
 from openai.types.beta.code_interpreter_tool import CodeInterpreterTool
 from pydantic import BaseModel
 
@@ -55,7 +55,7 @@ def tools_to_map(tools: List[AssistantTool]) -> dict[str, ActionItem]:
                 type=tool.type,
                 description="Generates text based on input data.",
             )
-        elif isinstance(tool, RetrievalTool):
+        elif isinstance(tool, FileSearchTool):
             tools_map[tool.type] = ActionItem(
                 type=tool.type,
                 description="Retrieves information from files provided.",
