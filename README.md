@@ -1,4 +1,5 @@
 # HexAmorous: Run Executor Worker
+### [Video Demo (full OpenGPTs-platform)](https://youtu.be/yPdIEKb3jWc)
 This serves as the run executor to [OpenGPTs-platform](https://github.com/OpenGPTs-platform).
 ![image](https://github.com/OpenGPTs-platform/HexAmerous/assets/37946988/610c60fe-ad01-4231-aec2-84c9a295ed30)
 [_View full Figma spec_](https://www.figma.com/file/RBobTMUNS6EtelpTDyYqnA/Open-GPTs?type=whiteboard&node-id=0%3A1&t=Ga2G6MUOUiNjqe3l-1)
