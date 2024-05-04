@@ -1,6 +1,7 @@
 # HexAmorous: Run Executor Worker
 This serves as the run executor to [OpenGPTs-platform](https://github.com/OpenGPTs-platform).
-
+![image](https://github.com/OpenGPTs-platform/HexAmerous/assets/37946988/610c60fe-ad01-4231-aec2-84c9a295ed30)
+[_View full Figma spec_](https://www.figma.com/file/RBobTMUNS6EtelpTDyYqnA/Open-GPTs?type=whiteboard&node-id=0%3A1&t=Ga2G6MUOUiNjqe3l-1)
 
 To elaborate, when you create an assistant with the `assistants-api`, then set up a thread and use a `run` command like
 ```py
