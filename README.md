@@ -15,5 +15,6 @@ This will create a `run` object that will be sent to the `RabbitMQ` queue. Then 
 ## Quickstart
 0. If you intend to use a custom version of `assistants-api` we recommend you use  [OpenGPTs-platform/assistants-api](https://github.com/OpenGPTs-platform/assistants-api) follow the [quickstart guide](https://github.com/OpenGPTs-platform/assistants-api?tab=readme-ov-file#quickstart) to get the API running. Alternatively you can use the official OpenAI Assistants's API through `openai==1.13.4`, but you will have limited tool functionality.
 1. Copy the [`.env.example`](.env.example) file to `.env` and fill in the required fields.
-2. (Recommended: Create a virtual environment) Install the dependencies using `pip install -r requirements.txt`.
-3. Run the run executor worker using `python run_executor_worker.py`. This will consume the [`RabbitMQ`](https://www.rabbitmq.com/docs) queue and execute the tasks.
+2. Run `pre-commit install` for linting and formatting.
+3. (Recommended: Create a virtual environment) Install the dependencies using `pip install -r requirements.txt`.
+4. Run the run executor worker using `python run_executor_worker.py`. This will consume the [`RabbitMQ`](https://www.rabbitmq.com/docs) queue and execute the tasks.
