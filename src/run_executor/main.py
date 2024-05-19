@@ -68,10 +68,8 @@ class ExecuteRun:
             )
             self.messages = messages
 
-            router_agent = router.RouterAgent()
-            router_response = router_agent.generate(
-                self.tools_map, self.messages
-            )
+            router_agent = router.RouterAgent(self)
+            router_response = router_agent.generate()
             if router_response != PromptKeys.TRANSITION.value:
                 create_message_runstep(
                     self.thread_id,

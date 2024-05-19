@@ -1,32 +1,39 @@
-from openai.types.beta.threads.message import Message
-from openai.pagination import SyncCursorPage
 from constants import PromptKeys
-from utils.tools import ActionItem
 from utils.openai_clients import litellm_client
 import os
+from run_executor import main
 
 
 class RouterAgent:
     def __init__(
         self,
+        execute_run_class: "main.ExecuteRun",
     ):
-        self.role_instructions = f"""Your role is to determine whether to use tools or directly generate a response.
-In the case that you think you may need more tools, simply respond with '{PromptKeys.TRANSITION.value}'. Otherwise, generate an appropriate response."""  # noqa
+        self.execute_run_class = execute_run_class
 
-    def compose_system_prompt(self, tools: dict[str, ActionItem]) -> str:
+        self.role_instructions = f"""Your role is to determine whether tools will be absolutely necessary to complete the task at hand.
+If tools are not necessary, generate a normal response.
+Otherwise if you will need to use tools, respond with '{PromptKeys.TRANSITION.value}'."""  # noqa
+
+    def compose_system_prompt(self) -> str:
         tools_list = "\n".join(
-            [f"- {tool.type}: {tool.description}" for _, tool in tools.items()]
+            [
+                f"- {tool.type}: {tool.description}"
+                for _, tool in self.execute_run_class.tools_map.items()
+            ]
         )
-        return f"""{self.role_instructions}
+        return f"""SYSTEM INSTRUCTION
+```{self.role_instructions}
 
 The tools available to you are:
-{tools_list}"""
+{tools_list}```
+
+ADDITIONAL INSTRUCTION
+```{self.execute_run_class.assistant.instructions}```"""
 
     # TODO: add assistant and base tools off of assistant
     def generate(
         self,
-        tools: dict[str, ActionItem],
-        paginated_messages: SyncCursorPage[Message],
     ) -> str:
         """
         Generates a response based on the chat history and role instructions.
@@ -42,11 +49,11 @@ The tools available to you are:
         messages = [
             {
                 "role": "system",
-                "content": self.compose_system_prompt(tools),
+                "content": self.compose_system_prompt(),
             }
         ]
         print("\n\nSYSTEM PROMPT: ", messages[0]["content"])
-        for message in paginated_messages.data:
+        for message in self.execute_run_class.messages.data:
             messages.append(
                 {
                     "role": message.role,

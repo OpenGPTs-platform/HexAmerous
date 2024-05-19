@@ -239,8 +239,11 @@ You must always begin with "Final Answer: " ."""  # noqa
             f"- {tool.type} ({tool.description})"
             for _, tool in self.tool_items.items()
         )
+        user_instruction = (
+            self.compose_user_instruction()
+        )  # TODO: the user instruction should not be appended here
 
-        return f"""You will observe that there may already be steps after "Begin!".
+        return f"""{user_instruction}You will observe that there may already be steps after "Begin!".
 The actions available to you are:
 
 {tools_prompt}
@@ -255,7 +258,7 @@ Use the following format:
 
 Begin!
 
-{react_trace_prompt}"""
+{react_trace_prompt}"""  # noqa
 
     def compose_few_shot_instruction(self) -> str:
         tools_list_prompt = "[" + ", ".join(list(self.tool_items.keys())) + "]"
@@ -266,6 +269,14 @@ Observation: the result of the action
 ... (this Thought/Action/Observation can repeat N times)
 Thought: I now know the final answer
 Final Answer: the final answer to the original input question"""
+
+    def compose_user_instruction(self) -> str:
+        if self.assistant.instructions:
+            return f"""ADDITIONAL INSTRUCTION
+```{self.assistant.instructions}```
+
+"""
+        return ""
 
     def compose_react_trace(
         self,

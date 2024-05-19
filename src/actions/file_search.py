@@ -33,8 +33,8 @@ class FileSearch:
         self,
     ) -> run.RunStep:
         # get relevant retrieval query
-
-        instruction = f"""Your role is generate a query for semantic search to retrieve important according to current working memory and the available files.
+        user_instruction = self.coala_class.compose_user_instruction()
+        instruction = f"""{user_instruction}Your role is generate a query for semantic search to retrieve important according to current working memory and the available files.
 Even if there is no relevant information in the working memory, you should still generate a query to retrieve the most relevant information from the available files.
 Only respond with the query iteself NOTHING ELSE.
 
