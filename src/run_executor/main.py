@@ -95,6 +95,7 @@ class ExecuteRun:
             coala_class = coala.CoALA(
                 self.run_id, self.thread_id, self.assistant_id
             )
+            self.run = coala_class.retrieve_run()
             self.assistant = coala_class.retrieve_assistant()
             self.messages = coala_class.retrieve_messages()
             self.runsteps = coala_class.retrieve_runsteps()
@@ -102,7 +103,7 @@ class ExecuteRun:
 
             coala_class.generate_question()
 
-            max_steps = 5
+            max_steps = 8
             curr_step = 0
             while (
                 coala_class.react_steps[-1].step_type

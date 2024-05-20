@@ -3,6 +3,7 @@ from typing import Optional, List
 from openai.types.beta.threads.message import Message
 from openai.pagination import SyncCursorPage
 from pydantic import BaseModel
+from utils.context import context_trimmer
 from utils.tools import ActionItem, Actions, actions_to_map, tools_to_map
 from utils.ops_api_handler import create_message_runstep
 from actions import web_retrieval, file_search
@@ -40,6 +41,7 @@ class CoALA:
         self.thread_id = thread_id
         self.assistant_id = assistant_id
 
+        self.run: Optional[run.Run] = None
         self.assistant: Optional[Assistant] = None
         self.messages: SyncCursorPage[Message] = SyncCursorPage(
             data=[]
@@ -281,8 +283,15 @@ Final Answer: the final answer to the original input question"""
     def compose_react_trace(
         self,
     ) -> str:
+        trimmed_react_steps = self.react_steps
+        if self.run.max_prompt_tokens:
+            trimmed_react_steps = context_trimmer(
+                item_list=self.react_steps,
+                max_length=self.run.max_prompt_tokens * 3,
+                trim_start=True,
+            )
         react_steps_str = "\n".join(
-            f"{step.step_type}: {step.content}" for step in self.react_steps
+            f"{step.step_type}: {step.content}" for step in trimmed_react_steps
         )
         return react_steps_str
 
@@ -352,6 +361,13 @@ Final Answer: the final answer to the original input question"""
         )
         self.messages = messages
         return messages
+
+    def retrieve_run(self) -> run.Run:
+        run = assistants_client.beta.threads.runs.retrieve(
+            thread_id=self.thread_id, run_id=self.run_id
+        )
+        self.run = run
+        return run
 
     def retrieve_runsteps(self) -> SyncCursorPage[run.RunStep]:
         runsteps = assistants_client.beta.threads.runs.steps.list(

@@ -11,11 +11,13 @@ class WebRetrieval:
     def __init__(
         self,
         coala_class: "coala.CoALA",
+        amt_documents: int = 1,
     ):
         self.coala_class = coala_class
+        self.amt_documents = amt_documents
 
     def query_rag(self, topic, query):
-        url = f"http://rag.pro/getModel/{topic}/{urllib.parse.quote(query)}"
+        url = f"http://api.rag.pro/getModel/{topic}/{urllib.parse.quote(query)}?top_k={self.amt_documents}"  # noqa
         response = requests.get(url)
 
         if response.status_code == 200:

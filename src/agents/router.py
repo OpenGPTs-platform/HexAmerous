@@ -1,4 +1,5 @@
 from constants import PromptKeys
+from utils.context import context_trimmer
 from utils.openai_clients import litellm_client
 import os
 from run_executor import main
@@ -46,6 +47,7 @@ ADDITIONAL INSTRUCTION
             str: It either returns `{PromptKeys.TRANSITION.value}` or a generated response.
         """  # noqa
 
+        # Build messages to send to the model
         messages = [
             {
                 "role": "system",
@@ -53,14 +55,25 @@ ADDITIONAL INSTRUCTION
             }
         ]
         print("\n\nSYSTEM PROMPT: ", messages[0]["content"])
+        cleaned_messages = []
         for message in self.execute_run_class.messages.data:
-            messages.append(
+            cleaned_messages.append(
                 {
                     "role": message.role,
                     "content": message.content[0].text.value,
                 }
             )
-        print("MESSAGES: ", messages)
+
+        trimmed_messages = cleaned_messages
+        if self.execute_run_class.run.max_prompt_tokens:
+            trimmed_messages = context_trimmer(
+                item_list=cleaned_messages,
+                max_length=self.execute_run_class.run.max_prompt_tokens * 3,
+                trim_start=True,
+            )
+        # print trimmed messages length vs cleaned messages length
+        messages += trimmed_messages
+
         response = litellm_client.chat.completions.create(
             model=os.getenv("LITELLM_MODEL"),
             messages=messages,
