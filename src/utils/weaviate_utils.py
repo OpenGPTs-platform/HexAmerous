@@ -3,16 +3,17 @@ import weaviate
 import os
 import math
 
-WEAVIATE_URL = os.getenv("WEAVIATE_URL")
+WEAVIATE_HOST = os.getenv("WEAVIATE_HOST")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-weaviate_client = weaviate.connect_to_wcs(
-    cluster_url=WEAVIATE_URL,
-    auth_credentials=None,
+weaviate_client = weaviate.connect_to_local(
+    host=WEAVIATE_HOST,
+    port=8080,
+    grpc_port=50051,
     headers={
         "X-OpenAI-Api-Key": OPENAI_API_KEY,
     },
 )
+
 LIMIT = 2
 
 
