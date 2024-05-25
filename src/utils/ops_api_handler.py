@@ -2,7 +2,6 @@
 from typing import List, Literal
 import requests
 import os
-from dotenv import load_dotenv
 from data_models import run
 from openai.types.beta.threads.message import Message
 from openai.types.beta.threads.runs import FileSearchToolCall
@@ -12,7 +11,6 @@ from openai.types.beta.threads.runs.web_retrieval_tool_call import (
 from utils.openai_clients import assistants_client
 
 # TODO: create run script that imports env vars
-load_dotenv()
 BASE_URL = os.getenv("ASSISTANTS_API_URL")
 
 
